@@ -53,8 +53,8 @@ double collision_circles_cost_spiral(const std::vector<PathPoint>& spiral,
       // TODO-Circle placement: Where should the circles be at? The code below
       // is NOT complete. HINT: use CIRCLE_OFFSETS[c], sine and cosine to
       // calculate x and y: cur_y + CIRCLE_OFFSETS[c] * std::sin/cos(cur_yaw)
-      auto circle_center_x = 0;  // <- Update 
-      auto circle_center_y = 0;  // <- Update 
+      auto circle_center_x = cur_x + CIRCLE_OFFSETS[c] * std::cos(cur_yaw);  // <- Update 
+      auto circle_center_y = cur_y + CIRCLE_OFFSETS[c] * std::sin(cur_yaw);  // <- Update 
 
       for (auto obst : obstacles) {
         if (collision) {
@@ -70,7 +70,13 @@ double collision_circles_cost_spiral(const std::vector<PathPoint>& spiral,
           // TODO-Distance from circles to obstacles/actor: How do you calculate
           // the distance between the center of each circle and the
           // obstacle/actor
-          double dist = 0;  // <- Update
+
+          // Student NOTE: from Lesson 3.34: double dist = std::sqrt(
+          // std::pow((ego_circle_center.x - actor_circle_center.x), 2) +
+          // std::pow((ego_circle_center.y - actor_circle_center.y), 2));
+          double dist = std::sqrt(
+              std::pow((circle_center_x - actor_center_x), 2) +
+              std::pow((circle_center_y - actor_center_y), 2));  // <- Update
 
           collision = (dist < (CIRCLE_RADII[c] + CIRCLE_RADII[c2]));
         }
@@ -93,9 +99,9 @@ double close_to_main_goal_cost_spiral(const std::vector<PathPoint>& spiral,
   // 1].y and spiral[n - 1].z.
   // Use main_goal.location.x, main_goal.location.y and main_goal.location.z
   // Ex: main_goal.location.x - spiral[n - 1].x
-  auto delta_x = 0;  // <- Update
-  auto delta_y = 0;  // <- Update
-  auto delta_z = 0;  // <- Update
+  auto delta_x = main_goal.location.x - spiral[n - 1].x;  // <- Update
+  auto delta_y = main_goal.location.x - spiral[n - 1].y;  // <- Update
+  auto delta_z = main_goal.location.x - spiral[n - 1].z;  // <- Update
 
   auto dist = std::sqrt((delta_x * delta_x) + (delta_y * delta_y) +
                         (delta_z * delta_z));
